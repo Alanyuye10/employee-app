@@ -17,7 +17,7 @@ function App() {
 
   // Fetch employees from the API
   const fetchEmployees = async () => {
-    const response = await axios.get("http://localhost:3000/employees");
+    const response = await axios.get("https://employee-server-4qhq.onrender.com");
     setEmployees(response.data);
   };
 
@@ -25,7 +25,7 @@ function App() {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     const newEmployee = { name, email, status };
-    await axios.post("http://localhost:3000/employees", newEmployee);
+    await axios.post("https://employee-server-4qhq.onrender.com", newEmployee);
     setName("");
     setEmail("");
     setStatus("active");
