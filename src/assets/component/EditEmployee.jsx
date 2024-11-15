@@ -3,30 +3,42 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function EditEmployee({ fetchEmployees }) {
-  const { id } = useParams();
+  const { id } = useParams(); // Get the employee ID from the URL
   const navigate = useNavigate();
-  const [employee, setEmployee] = useState({ name: "", email: "", status: "" });
+  const [employee, setEmployee] = useState({ name: "", email: "", status: "active" });
 
+  const API_URL = "https://employee-server-4qhq.onrender.com"; // Same base URL
+
+  // Fetch employee data on component mount
   useEffect(() => {
     const fetchEmployee = async () => {
-      const response = await axios.get(`http://localhost:3000/employees/${id}`);
-      setEmployee(response.data);
+      try {
+        const response = await axios.get(`${API_URL}/employees/${id}`);
+        setEmployee(response.data); // Populate the form with existing data
+      } catch (error) {
+        console.error("Error fetching employee:", error);
+      }
     };
+
     fetchEmployee();
   }, [id]);
 
-  const handleSave = async (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios.put(`http://localhost:3000/employees/${id}`, employee);
-    fetchEmployees();  // Trigger refresh of the employee list
-    navigate("/");  // Navigate back to the home page
+    try {
+      await axios.put(`${API_URL}/employees/${id}`, employee); // Update employee data
+      fetchEmployees(); // Refresh the employee list in the main app
+      navigate("/"); // Redirect back to the main page
+    } catch (error) {
+      console.error("Error updating employee:", error);
+    }
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-2xl font-bold mb-4">Edit Employee</h2>
-
-      <form onSubmit={handleSave} className="space-y-4">
+    <div>
+      <h2 className="text-xl font-bold">Edit Employee</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"
           value={employee.name}
@@ -51,8 +63,7 @@ function EditEmployee({ fetchEmployees }) {
           <option value="active">Active</option>
           <option value="inactive">Inactive</option>
         </select>
-
-        <button type="submit" className="bg-blue-500 text-white p-2">
+        <button type="submit" className="bg-gray-300 text-black p-2">
           Save Changes
         </button>
       </form>
