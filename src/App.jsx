@@ -25,7 +25,7 @@ function App() {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     const newEmployee = { name, email, status };
-    await axios.post("https://employee-server-4qhq.onrender.com", newEmployee);
+    await axios.post("http://localhost:3000/employees", newEmployee);
     setName("");
     setEmail("");
     setStatus("active");
