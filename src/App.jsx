@@ -10,6 +10,8 @@ function App() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("active");
 
+  const API_URL = "https://employee-server-4qhq.onrender.com"; // Use the deployed server URL
+
   // Fetch employees when the component mounts
   useEffect(() => {
     fetchEmployees();
@@ -17,7 +19,7 @@ function App() {
 
   // Fetch employees from the API
   const fetchEmployees = async () => {
-    const response = await axios.get("https://employee-server-4qhq.onrender.com");
+    const response = await axios.get(`${API_URL}/employees`);
     setEmployees(response.data);
   };
 
@@ -25,17 +27,17 @@ function App() {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     const newEmployee = { name, email, status };
-    await axios.post("http://localhost:3000/employees", newEmployee);
+    await axios.post(`${API_URL}/employees`, newEmployee);
     setName("");
     setEmail("");
     setStatus("active");
-    fetchEmployees();  // Refresh the employee list after adding
+    fetchEmployees(); // Refresh the employee list after adding
   };
 
   // Delete an employee
   const handleDeleteEmployee = async (id) => {
-    await axios.delete(`http://localhost:3000/employees/${id}`);
-    fetchEmployees();  // Refresh the employee list after deletion
+    await axios.delete(`${API_URL}/employees/${id}`);
+    fetchEmployees(); // Refresh the employee list after deletion
   };
 
   return (
